@@ -1,0 +1,108 @@
+<!DOCTYPE html >
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple LMS - Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+<!--Navbar-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="/index.html">MyLMS</a>
+        <ul class="navbar-nav ms-auto">
+            <a class="nav-link active" th:href="@{/}">Dashboard</a>
+            <a class="nav-link" th:href="@{/}">Courses</a>
+            <a class="nav-link" th:href="@{/admin/user_management}">Users</a>
+        </ul>
+        <div class="collapse navbar-collapse">
+            <div class="navbar-nav ms-auto">
+                <div class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle fs-4 me-2"></i>
+                        <span data-user-name>Admin User</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><h6 class="dropdown-header">Signed in as <span data-user-email>admin@example.com</span></h6></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" data-logout><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+<!--END Navbar-->
+
+<!-- Main Content -->
+<div class="container py-5">
+    <!-- Welcome Section -->
+    <div class="mb-5">
+        <div class="d-flex justify-content-between align-items-center">
+            <div>
+                <h1 class="display-6 fw-semibold text-dark mb-2">Welcome back, <span data-user-name>Admin User</span>!</h1>
+                <p class="text-secondary mb-0">System overview and management</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-4">
+        <div class="col-md-3">
+            <div class="card border h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-book text-primary float-end fs-5"></i>
+                    <div class="small text-secondary fw-medium mb-2">Total Courses</div>
+                    <div class="display-6 fw-semibold text-dark" id="totalCourses">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-users text-success float-end fs-5"></i>
+                    <div class="small text-secondary fw-medium mb-2">Total Students</div>
+                    <div class="display-6 fw-semibold text-dark" id="totalStudents" th:text="${totalUsers}">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-chalkboard-teacher text-warning float-end fs-5"></i>
+                    <div class="small text-secondary fw-medium mb-2" >Total Teachers</div>
+                    <div class="display-6 fw-semibold text-dark" id="totalTeachers" th:text="${teacherUsers}">0</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border h-100 shadow-sm">
+                <div class="card-body">
+                    <i class="fas fa-graduation-cap text-info float-end fs-5"></i>
+                    <div class="small text-secondary fw-medium mb-2">Active Courses</div>
+                    <div class="display-6 fw-semibold text-dark" id="activeCourses">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Quick Actions -->
+    <div class="mt-5">
+        <div class="row g-3">
+            <div class="col-md-6">
+                <a th:href="@{/admin/user_management}" class="btn btn-dark fw-medium px-4 py-3 w-100">
+                    <i class="bi bi-plus-circle me-2"></i>Manage Courses
+                </a>
+            </div>
+            <div class="col-md-6">
+                <a th:href="@{/admin/user_management}" class="btn btn-outline-secondary fw-medium px-4 py-3 w-100">
+                    <i class="bi bi-person-plus me-2"></i>Manage Users
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
