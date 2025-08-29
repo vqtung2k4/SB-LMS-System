@@ -1,47 +1,53 @@
 package com.edu.fsa.LmsSpringBoot.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @Column(name = "user_id", length = 50)
+    private String id;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "username", unique = true, nullable = false, length = 100)
     private String username;
 
-    @Column(nullable = false)
+    @Nationalized
+    @Column(name = "password", nullable = false)
     private String password;
 
-    @Column(unique = true, nullable = false)
+    @Nationalized
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
 
-    @Column(name = "first_name")
+    @Nationalized
+    @Column(name = "first_name", length = 255)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Nationalized
+    @Column(name = "last_name", length = 255)
     private String lastName;
 
-    @Column(name = "user_type")
+    @Column(name = "user_type", length = 20)
     private String userType;
 
     @Column(name = "is_active")
     private boolean isActive;
 
-    @Column(name = "created_at")
-    private LocalDate createdAt;
+    @Column(name = "created_at", columnDefinition = "datetime2")
+    private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
-    private LocalDate updatedAt;
+    @Column(name = "updated_at", columnDefinition = "datetime2")
+    private LocalDateTime updatedAt;
 
     public User() {
     }
 
-    public User(int id, String username, String password, String email, String firstName, String lastName, String userType, boolean isActive, LocalDate createdAt, LocalDate updatedAt) {
+    public User(String id, String username, String password, String email, String firstName, String lastName, String userType, boolean isActive, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -54,11 +60,11 @@ public class User {
         this.updatedAt = updatedAt;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -118,19 +124,19 @@ public class User {
         isActive = active;
     }
 
-    public LocalDate getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(LocalDate createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
 
-    public LocalDate getUpdatedAt() {
+    public LocalDateTime getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(LocalDate updatedAt) {
+    public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
     }
 }

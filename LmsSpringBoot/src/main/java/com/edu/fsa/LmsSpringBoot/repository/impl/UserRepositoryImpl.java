@@ -6,11 +6,13 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
 
 @Repository
+@Transactional
 public class UserRepositoryImpl implements UserRepository {
 
     @PersistenceContext
@@ -23,13 +25,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findById(int id) {
+    public User findById(String id) {
         return entityManager.find(User.class,id);
     }
 
     @Override
     public User save(User user) {
-        if (user.getId() == 0) {
+        if (user.getId() == null || user.getId().isBlank()) {
             entityManager.persist(user);
             return user;
         } else {
@@ -43,7 +45,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(String id) {
         User user = findById(id);
         if (user != null) {
             entityManager.remove(user);
