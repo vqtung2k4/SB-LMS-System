@@ -2,8 +2,6 @@ package com.edu.fsa.LmsSpringBoot.model;
 
 import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
