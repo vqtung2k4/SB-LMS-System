@@ -100,4 +100,39 @@ public class AdminController {
         }
         return "redirect:/admin/user_management";
     }
+
+    @PostMapping("/admin/user_management/{userId}/edit")
+    public String editUser(@PathVariable("userId") String userId,
+                           @RequestParam("name") String name,
+                           @RequestParam("email") String email,
+                           @RequestParam("role") String role,
+                           RedirectAttributes redirectAttributes) {
+        try {
+            User user = userRepository.findById(userId);
+            if(user != null) {
+                String[] parts = name.trim().split("\\s+", 2);
+                String firstName = parts.length > 0 ? parts[0] : "";
+                String lastName = parts.length > 1 ? parts[1] : "";
+
+               String userType = switch (role == null ? "" : role.toLowerCase()) {
+                   case "admin" -> "ADMIN";
+                   case "teacher" -> "INSTRUCTOR";
+                   case "student" -> "STUDENT";
+                   default -> "STUDENT";
+                };
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                user.setEmail(email);
+                user.setUserType(userType);
+                user.setUpdatedAt(LocalDateTime.now());
+
+                userRepository.update(user);
+            } else {
+                redirectAttributes.addFlashAttribute("message", "User not found");
+            }
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("message", "Error editing user");
+        }
+        return "redirect:/admin/user_management";
+    }
 }

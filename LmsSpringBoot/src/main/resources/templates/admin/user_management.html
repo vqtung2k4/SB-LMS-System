@@ -129,14 +129,16 @@
                                 class="form-control border-start-0"
                                 placeholder="Search users..."
                                 type="text"
+                                id="searchInput"
+                                oninput="filterUsers()"
                         />
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-select">
-                        <option selected>All Roles</option>
+                    <select class="form-select" id="roleFilter" onchange="filterUsers()">
+                        <option value="">All Roles</option>
                         <option value="admin">Admin</option>
-                        <option value="teacher">Teacher</option>
+                        <option value="instructor">Instructor</option>
                         <option value="student">Student</option>
                     </select>
                 </div>
@@ -199,9 +201,13 @@
                             <span th:text="${user.email}"></span>
                         </td>
                         <td class="py-3">
-              <span class="badge" th:class="${user.userType == 'ADMIN'} ? 'bg-danger' :
-(${user.userType == 'INSTRUCTOR'} ? 'bg-warning text-dark' : 'bg-info')"
-                    th:text="${#strings.capitalize(#strings.toLowerCase(user.userType))}"></span>
+              <span class="badge"
+                    th:classappend="${user.userType == null || user.userType.isEmpty()} ? 'bg-secondary' :
+                                     (${user.userType == 'ADMIN'} ? 'bg-danger' :
+                                     (${user.userType == 'INSTRUCTOR'} ? 'bg-warning text-dark' :
+                                     ('bg-info')))"
+                    th:text="${user.userType == null || user.userType.isEmpty()} ? 'N/A' : ${#strings.capitalize(#strings.toLowerCase(user.userType))}">
+              </span>
                         </td>
                         <td class="py-3">
                             <span th:text="${#temporals.format(user.createdAt, 'MM dd, yyyy')}"></span>
@@ -211,9 +217,19 @@
                         </td>
                         <td class="py-3">
                             <div class="btn btn-group btn-group-sm">
-                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editUserModal"><i class="bi bi-pencil"></i></button>
-                                <form th:action="@{'/admin/user_management/' + ${user.getId()} + '/delete'}" method="post" style="display: inline">
-                                    <button class="btn btn-outline-danger btn-sm" th:data-user-name="${user.firstName + ' ' + user.lastName}" onclick="return confirmDelete(this)"><i class="bi bi-trash"></i></button>
+                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                                        data-bs-target="#editUserModal"
+                                        th:data-user-id="${user.getId()}"
+                                        th:data-user-name="${user.firstName} + ' ' + ${user.lastName}"
+                                        th:data-user-email="${user.email}"
+                                        th:data-user-type="${user.userType}"
+                                        onclick="fillEditUser(this)"
+                                ><i class="bi bi-pencil"></i></button>
+                                <form th:action="@{'/admin/user_management/' + ${user.getId()} + '/delete'}"
+                                      method="post" style="display: inline">
+                                    <button class="btn btn-outline-danger btn-sm"
+                                            th:data-user-name="${user.firstName + ' ' + user.lastName}"
+                                            onclick="return confirmDelete(this)"><i class="bi bi-trash"></i></button>
                                 </form>
                             </div>
                         </td>
@@ -297,7 +313,7 @@
             </div>
 
             <div class="modal-body">
-                <form id="editUserForm">
+                <form id="editUserForm" method="post">
                     <input type="hidden" id="editUserId" name="userId">
 
                     <div class="mb-3">
@@ -332,7 +348,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
-                <button class="btn btn-dark" id="saveEditUser">Save Changes</button>
+                <button form="editUserForm" class="btn btn-dark" id="saveEditUser">Save Changes</button>
             </div>
         </div>
     </div>
@@ -342,6 +358,71 @@
     function confirmDelete(button) {
         const username = button.getAttribute('data-user-name');
         return confirm('Do you want to delete user: ' + username + '?')
+    }
+
+    function fillEditUser(button) {
+        const userId = button.getAttribute('data-user-id');
+        const name = button.getAttribute('data-user-name');
+        const email = button.getAttribute('data-user-email');
+        const userType = button.getAttribute('data-user-type');
+
+        document.getElementById('editUserId').value = userId;
+        document.getElementById('editUserName').value = name;
+        document.getElementById('editUserEmail').value = email;
+
+        const roleSelect = document.getElementById('editUserRole');
+        roleSelect.value = roleValue;
+
+        document.getElementById('editUserForm').action = '/admin/user_management/' + userId + '/edit';
+    }
+
+    function filterUsers() {
+        const searchInput = document.getElementById('searchInput').value.toLowerCase();
+        const roleFilter = document.getElementById('roleFilter').value.toLowerCase();
+        const tableRows = document.querySelectorAll('tbody tr');
+        let visibleCount = 0;
+
+        tableRows.forEach(row => {
+            const nameElement = row.querySelector('td:nth-child(1)');
+            const emailElement = row.querySelector('td:nth-child(2)');
+            const roleBadgeElement = row.querySelector('td:nth-child(3) .badge');
+
+            if (!nameElement || !emailElement || !roleBadgeElement) {
+                row.style.display = 'none'; 
+                return; 
+            }
+
+            const nameText = nameElement.textContent.toLowerCase();
+            const emailText = emailElement.textContent.toLowerCase();
+            const roleText = roleBadgeElement.textContent.toLowerCase();
+
+            let roleValue = '';
+            if (roleText.includes('admin')) roleValue = 'admin';
+            else if (roleText.includes('instructor')) roleValue = 'instructor';
+            else if (roleText.includes('student')) roleValue = 'student';
+
+            const matchesSearch = nameText.includes(searchInput) || emailText.includes(searchInput);
+            const matchesRole = roleFilter === '' || roleValue === roleFilter;
+
+            if(matchesSearch && matchesRole) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        updateUserCount(visibleCount);
+    }
+
+    function updateUserCount(count) {
+        const header = document.querySelector('.card-header h5');
+        header.textContent = `Users (${count})`;
+    }
+
+    function clearFilters() {
+        document.getElementById(`searchInput`).value = '';
+        document.getElementById(`roleFilter`).value = '';
+        filterUsers();
     }
 </script>
 </body>
