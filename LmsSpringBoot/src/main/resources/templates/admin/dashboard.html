@@ -55,8 +55,8 @@
             <div class="card border h-100 shadow-sm">
                 <div class="card-body">
                     <i class="fas fa-book text-primary float-end fs-5"></i>
-                    <div class="small text-secondary fw-medium mb-2">Total Courses</div>
-                    <div class="display-6 fw-semibold text-dark" id="totalCourses">0</div>
+                    <div class="small text-secondary fw-medium mb-2" >Total Courses</div>
+                    <div class="display-6 fw-semibold text-dark" id="totalCourses" th:text="${totalCourses}">0</div>
                 </div>
             </div>
         </div>
@@ -65,7 +65,7 @@
                 <div class="card-body">
                     <i class="fas fa-users text-success float-end fs-5"></i>
                     <div class="small text-secondary fw-medium mb-2">Total Students</div>
-                    <div class="display-6 fw-semibold text-dark" id="totalStudents" th:text="${totalUsers}">0</div>
+                    <div class="display-6 fw-semibold text-dark" id="totalStudents" th:text="${studentUsers}">0</div>
                 </div>
             </div>
         </div>
@@ -83,7 +83,7 @@
                 <div class="card-body">
                     <i class="fas fa-graduation-cap text-info float-end fs-5"></i>
                     <div class="small text-secondary fw-medium mb-2">Active Courses</div>
-                    <div class="display-6 fw-semibold text-dark" id="activeCourses">0</div>
+                    <div th:text="${activeCourses}" class="display-6 fw-semibold text-dark" id="activeCourses">0</div>
                 </div>
             </div>
         </div>
@@ -92,7 +92,7 @@
     <div class="mt-5">
         <div class="row g-3">
             <div class="col-md-6">
-                <a th:href="@{/admin/user_management}" class="btn btn-dark fw-medium px-4 py-3 w-100">
+                <a th:href="@{/admin/course_management}" class="btn btn-dark fw-medium px-4 py-3 w-100">
                     <i class="bi bi-plus-circle me-2"></i>Manage Courses
                 </a>
             </div>

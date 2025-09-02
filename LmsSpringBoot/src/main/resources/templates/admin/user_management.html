@@ -283,7 +283,7 @@
                         <select class="form-select" id="createUserRole" name="role" required>
                             <option value="">Select Role</option>
                             <option value="admin">Admin</option>
-                            <option value="teacher">Teacher</option>
+                            <option value="instructor">Instructor</option>
                             <option value="student">Student</option>
                         </select>
                         <div class="invalid-feedback">
@@ -336,7 +336,7 @@
                         <select class="form-select" id="editUserRole" name="role" required>
                             <option value="">Select Role</option>
                             <option value="admin">Admin</option>
-                            <option value="teacher">Teacher</option>
+                            <option value="instructor">Instructor</option>
                             <option value="student">Student</option>
                         </select>
                         <div class="invalid-feedback">
@@ -370,6 +370,7 @@
         document.getElementById('editUserEmail').value = email;
 
         const roleSelect = document.getElementById('editUserRole');
+        const roleValue = userType.toLowerCase();
         roleSelect.value = roleValue;
 
         document.getElementById('editUserForm').action = '/admin/user_management/' + userId + '/edit';
