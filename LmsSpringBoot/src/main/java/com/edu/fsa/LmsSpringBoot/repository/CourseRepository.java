@@ -10,4 +10,5 @@ public interface CourseRepository {
     Course save(Course course);
     Course update(Course course);
     void deleteById(String id);
+    List<Course> findByInstructorId(String instructorId); 
 }

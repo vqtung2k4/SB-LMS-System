@@ -48,4 +48,11 @@ public class CourseRepositoryImpl implements CourseRepository {
             entityManager.remove(course);
         }
     }
+
+    @Override
+    public List<Course> findByInstructorId(String instructorId) {
+        TypedQuery<Course> query = entityManager.createQuery("FROM Course c WHERE c.instructorId = :instructorId", Course.class);
+        query.setParameter("instructorId", instructorId);
+        return query.getResultList();
+    }
 }

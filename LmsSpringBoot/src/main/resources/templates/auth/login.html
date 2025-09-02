@@ -52,13 +52,13 @@
             <span th:text="${message}">Login Success</span>
         </div>
 
-        <form th:action="@{/auth/login}" method="post">
+        <form th:action="@{/authenticate}" method="post">
             <div class="mb-3">
-                <label for="email">Email</label>
+                <label for="username">Email</label>
                 <input
-                        id="email"
+                        id="username"
                         type="email"
-                        name="email"
+                        name="username"
                         class="form-control"
                         placeholder="Enter your email"
                         th:value="${email}"

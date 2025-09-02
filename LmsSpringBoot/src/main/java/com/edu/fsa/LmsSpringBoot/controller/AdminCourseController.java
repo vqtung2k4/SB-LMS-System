@@ -62,7 +62,7 @@ public class AdminCourseController {
             course.setDescription(description);
             course.setInstructorId(teacherId);
             course.setMaxCapacity(maxStudents);
-            course.setCredits(3); // Default credits, can be made configurable
+            course.setCredits(3); 
             course.setCourseCode(category.isEmpty() ? "GEN" : category.substring(0, 3).toUpperCase() + UUID.randomUUID().toString().substring(0, 3).toUpperCase()); // Basic code generation
             course.setActive("active".equalsIgnoreCase(status));
             course.setCreatedAt(LocalDateTime.now());

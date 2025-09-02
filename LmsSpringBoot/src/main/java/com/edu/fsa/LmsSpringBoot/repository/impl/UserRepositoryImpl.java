@@ -3,6 +3,7 @@ package com.edu.fsa.LmsSpringBoot.repository.impl;
 import com.edu.fsa.LmsSpringBoot.model.User;
 import com.edu.fsa.LmsSpringBoot.repository.UserRepository;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
@@ -49,6 +50,17 @@ public class UserRepositoryImpl implements UserRepository {
         User user = findById(id);
         if (user != null) {
             entityManager.remove(user);
+        }
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        try {
+            TypedQuery<User> query = entityManager.createQuery("FROM User WHERE email = :email", User.class);
+            query.setParameter("email", email);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         }
     }
 }
