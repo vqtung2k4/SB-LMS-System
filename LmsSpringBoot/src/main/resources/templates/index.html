@@ -64,7 +64,7 @@
 
         <script sec:authorize="isAuthenticated()">
             document.addEventListener('DOMContentLoaded', function() {
-                var userRoles = /*[[${#authentication.authorities}]]*/ [];
+                var userRoles = [];
 
                 if (userRoles.some(role => role.authority === 'ROLE_ADMIN')) {
                     window.location.href = '/admin/dashboard';

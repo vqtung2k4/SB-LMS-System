@@ -2,6 +2,7 @@ package com.edu.fsa.LmsSpringBoot.controller;
 import com.edu.fsa.LmsSpringBoot.model.User;
 import com.edu.fsa.LmsSpringBoot.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,9 @@ import java.util.UUID;
 public class AdminUserController {
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @GetMapping("/admin/user_management")
     public String getAdminUserManagement(Model model) {
@@ -68,7 +72,7 @@ public class AdminUserController {
         User user = new User();
         user.setId(userId);
         user.setUsername(username);
-        user.setPassword(password);
+        user.setPassword(passwordEncoder.encode(password));
         user.setFirstName(firstName);
         user.setLastName(lastName);
         user.setEmail(email);
