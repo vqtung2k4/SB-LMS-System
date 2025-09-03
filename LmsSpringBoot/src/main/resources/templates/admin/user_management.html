@@ -22,12 +22,27 @@
             <ul class="navbar-nav ms-auto">
                 <a class="nav-link" th:href="@{/admin/dashboard}">Dashboard</a>
                 <a class="nav-link" th:href="@{/admin/course_management}">Courses</a>
-                <a class="nav-link" th:href="@{/admin/user_management}">Users</a
-                >
+                <a class="nav-link" th:href="@{/admin/user_management}">Users</a>
             </ul>
             <div class="collapse navbar-collapse">
-                <div class="navbar-nav ms-auto fs-3">
-                    <i class="bi bi-person-circle"></i>
+                <div class="navbar-nav ms-auto">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-4 me-2"></i>
+                            <span data-user-name>Admin User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Signed in as <span data-user-email>admin@example.com</span></h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="px-3 m-0">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -388,8 +403,8 @@
             const roleBadgeElement = row.querySelector('td:nth-child(3) .badge');
 
             if (!nameElement || !emailElement || !roleBadgeElement) {
-                row.style.display = 'none'; 
-                return; 
+                row.style.display = 'none';
+                return;
             }
 
             const nameText = nameElement.textContent.toLowerCase();
@@ -420,8 +435,8 @@
     }
 
     function clearFilters() {
-        document.getElementById(`searchInput`).value = '';
-        document.getElementById(`roleFilter`).value = '';
+        document.getElementById('searchInput').value = '';
+        document.getElementById('roleFilter').value = '';
         filterUsers();
     }
 </script>

@@ -72,7 +72,6 @@ public class RegisterController {
 
         try {
             userRepository.save(user);
-            System.out.println("User saved to database: " + user.getEmail());
 
             if ("INSTRUCTOR".equals(userType)) {
                 Instructor instructor = new Instructor();
@@ -87,7 +86,6 @@ public class RegisterController {
             redirectAttributes.addFlashAttribute("message", "Registration successful! Please log in.");
             return "redirect:/auth/login";
         } catch (Exception e) {
-            System.err.println("Error saving user or instructor: " + e.getMessage());
             e.printStackTrace();
             redirectAttributes.addFlashAttribute("error", "Registration failed due to a server error.");
             return "redirect:/auth/register";

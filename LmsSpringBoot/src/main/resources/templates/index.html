@@ -62,18 +62,6 @@
             <a th:href="@{/auth/register}" class="btn btn-secondary disabled" aria-disabled="true">Register</a>
         </div>
 
-        <script sec:authorize="isAuthenticated()">
-            document.addEventListener('DOMContentLoaded', function() {
-                var userRoles = [];
-
-                if (userRoles.some(role => role.authority === 'ROLE_ADMIN')) {
-                    window.location.href = '/admin/dashboard';
-                } else if (userRoles.some(role => role.authority === 'ROLE_INSTRUCTOR')) {
-                    window.location.href = '/instructor/dashboard';
-                }
-            });
-        </script>
-
     </div>
 </main>
 

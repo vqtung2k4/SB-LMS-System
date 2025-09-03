@@ -11,7 +11,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Collections;
 import java.util.List;
@@ -30,26 +29,25 @@ public class InstructorController {
 
     @GetMapping("/instructor/dashboard")
     public String getInstructorDashboard(@AuthenticationPrincipal User authenticatedUser, Model model) {
-
-        if (authenticatedUser == null ) {
+        if (authenticatedUser == null) {
             return "redirect:/auth/login";
         }
 
-        String currentInstructorId = authenticatedUser.getId();
-        Instructor instructor = instructorRepository.findById(currentInstructorId);
+        String currentUserId = authenticatedUser.getId();
+        Instructor instructor = instructorRepository.findByUserId(currentUserId);
         List<Course> courses;
 
+        model.addAttribute("instructorName", authenticatedUser.getFirstName() + " " + authenticatedUser.getLastName());
+        model.addAttribute("instructorEmail", authenticatedUser.getEmail());
+        model.addAttribute("welcomeMessage", "Welcome back, " + authenticatedUser.getFirstName() + "!");
+
         if (instructor != null) {
-            model.addAttribute("instructorName", authenticatedUser.getFirstName() + " " + authenticatedUser.getLastName());
-            model.addAttribute("instructorEmail", authenticatedUser.getEmail());
-            model.addAttribute("welcomeMessage", "Welcome back, " + authenticatedUser.getFirstName() + "!");
             courses = courseRepository.findByInstructorId(instructor.getInstructorId());
         } else {
-            return "redirect:/auth/login";
+            courses = Collections.emptyList();
         }
 
         model.addAttribute("courses", courses);
-
         return "instructor/dashboard";
     }
 }

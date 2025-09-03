@@ -25,8 +25,24 @@
                 <a class="nav-link" th:href="@{/admin/user_management}">Users</a>
             </ul>
             <div class="collapse navbar-collapse">
-                <div class="navbar-nav ms-auto fs-3">
-                    <i class="bi bi-person-circle"></i>
+                <div class="navbar-nav ms-auto">
+                    <div class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle fs-4 me-2"></i>
+                            <span data-user-name>Admin User</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><h6 class="dropdown-header">Signed in as <span data-user-email>admin@example.com</span></h6></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="px-3 m-0">
+                                    <button type="submit" class="dropdown-item">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -213,8 +229,11 @@
                                             th:data-course-name="${course.courseName}"
                                             th:data-course-description="${course.description}"
                                             th:data-course-instructor-id="${course.instructorId}"
+                                            th:data-course-category="${course.category}"
                                             th:data-course-max-students="${course.maxCapacity}"
                                             th:data-course-status="${course.active ? 'active' : 'draft'}"
+                                            th:data-course-start-date="${course.startDate}"
+                                            th:data-course-end-date="${course.endDate}"
                                             onclick="fillEditCourse(this)">
                                         <i class="bi bi-pencil"></i>
                                     </button>
@@ -323,6 +342,24 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="createStartDate" class="form-label fw-semibold">Start Date</label>
+                                    <input type="date" class="form-control" id="createStartDate" name="startDate" onchange="validateDates('create')">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="createEndDate" class="form-label fw-semibold">End Date</label>
+                                    <input type="date" class="form-control" id="createEndDate" name="endDate" onchange="validateDates('create')">
+                                    <div class="invalid-feedback" id="createEndDateError">
+                                        End date cannot be earlier than start date.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -425,6 +462,24 @@
                                 </div>
                             </div>
                         </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editStartDate" class="form-label fw-semibold">Start Date</label>
+                                    <input type="date" class="form-control" id="editStartDate" name="startDate" onchange="validateDates('edit')">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="editEndDate" class="form-label fw-semibold">End Date</label>
+                                    <input type="date" class="form-control" id="editEndDate" name="endDate" onchange="validateDates('edit')">
+                                    <div class="invalid-feedback" id="editEndDateError">
+                                        End date cannot be earlier than start date.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -451,14 +506,20 @@
         const courseDescription = button.getAttribute('data-course-description');
         const instructorId = button.getAttribute('data-course-instructor-id');
         const maxStudents = button.getAttribute('data-course-max-students');
+        const courseCategory = button.getAttribute('data-course-category');
         const courseStatus = button.getAttribute('data-course-status');
+        const startDate = button.getAttribute('data-course-start-date');
+        const endDate = button.getAttribute('data-course-end-date');
 
         document.getElementById('editCourseId').value = courseId;
         document.getElementById('editCourseTitle').value = courseName;
         document.getElementById('editCourseDescription').value = courseDescription;
         document.getElementById('editAssignTeacher').value = instructorId;
         document.getElementById('editMaxStudents').value = maxStudents;
+        document.getElementById('editCourseCategory').value = courseCategory;
         document.getElementById('editCourseStatus').value = courseStatus;
+        document.getElementById('editStartDate').value = startDate || '';
+        document.getElementById('editEndDate').value = endDate || '';
 
         document.getElementById('editCourseForm').action = '/admin/course_management/' + courseId + '/edit';
     }
@@ -511,6 +572,23 @@
         document.getElementById('searchInput').value = '';
         document.getElementById('statusFilter').value = '';
         filterCourses();
+    }
+
+    function validateDates(prefix) {
+        const startDateInput = document.getElementById(prefix + 'StartDate');
+        const endDateInput = document.getElementById(prefix + 'EndDate');
+        const startDate = new Date(startDateInput.value);
+        const endDate = new Date(endDateInput.value);
+
+        if (endDateInput.value) {
+            if (endDate < startDate) {
+                endDateInput.setCustomValidity('Invalid');
+                document.getElementById(prefix + 'EndDateError').style.display = 'block';
+            } else {
+                endDateInput.setCustomValidity('');
+                document.getElementById(prefix + 'EndDateError').style.display = 'none';
+            }
+        }
     }
 </script>
 </body>

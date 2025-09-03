@@ -48,6 +48,9 @@ public class Course {
     @Column(name = "created_at", columnDefinition = "datetime2")
     private LocalDateTime createdAt;
 
+    @Column(name = "category", length = 100)
+    private String category;
+
     public Course() {
     }
 
@@ -138,4 +141,7 @@ public class Course {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
 }
