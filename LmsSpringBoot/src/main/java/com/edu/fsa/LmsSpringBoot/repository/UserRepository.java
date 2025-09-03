@@ -3,6 +3,7 @@ package com.edu.fsa.LmsSpringBoot.repository;
 import com.edu.fsa.LmsSpringBoot.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
     List<User> findAll();
@@ -10,5 +11,5 @@ public interface UserRepository {
     User save(User user);
     User update(User user);
     void deleteById(String id);
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 }

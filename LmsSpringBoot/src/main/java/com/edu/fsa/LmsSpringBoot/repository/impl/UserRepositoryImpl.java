@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -54,13 +55,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User findByEmail(String email) {
+    public Optional<User> findByEmail(String email) {
         try {
             TypedQuery<User> query = entityManager.createQuery("FROM User WHERE email = :email", User.class);
             query.setParameter("email", email);
-            return query.getSingleResult();
+            User user = query.getSingleResult();
+            return Optional.of(user);
         } catch (NoResultException e) {
-            return null;
+            return Optional.empty();
         }
     }
 }

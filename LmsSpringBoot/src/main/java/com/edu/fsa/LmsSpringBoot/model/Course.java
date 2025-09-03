@@ -1,9 +1,6 @@
 package com.edu.fsa.LmsSpringBoot.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import org.hibernate.annotations.Nationalized;
 
 import java.time.LocalDate;
@@ -50,6 +47,10 @@ public class Course {
 
     @Column(name = "category", length = 100)
     private String category;
+
+    @ManyToOne
+    @JoinColumn(name = "instructor_id", referencedColumnName = "instructor_id", insertable = false, updatable = false)
+    private Instructor instructor;
 
     public Course() {
     }
@@ -144,4 +145,12 @@ public class Course {
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }
+
+    public Instructor getInstructor() {
+        return instructor;
+    }
+
+    public void setInstructor(Instructor instructor) {
+        this.instructor = instructor;
+    }
 }

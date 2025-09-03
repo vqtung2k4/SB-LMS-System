@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class InstructorController {
@@ -34,7 +35,8 @@ public class InstructorController {
         }
 
         String currentUserId = authenticatedUser.getId();
-        Instructor instructor = instructorRepository.findByUserId(currentUserId);
+        Optional<Instructor> optionalInstructor = instructorRepository.findByUserId(currentUserId);
+        Instructor instructor = optionalInstructor.orElse(null);
         List<Course> courses;
 
         model.addAttribute("instructorName", authenticatedUser.getFirstName() + " " + authenticatedUser.getLastName());
